@@ -1,12 +1,11 @@
-# fn-ref!
+# fn-ref
 
 ## Overview 
 
-`FnRef` implements a non-owning function wrapper that avoids the indirection cost of
+`FnRef` implements a non-owning callable wrapper that avoids the indirection cost of
 traditional type-erasure designs. This is achieved through template specialization,
-which allows aggressive compiler optimizations. The immediate consequence is that 
-function calls are resolved at compile time, so that codegen is identical to direct 
-calls. This devirtualization implies that `FnRef` preserves inlining potential suited
+which allows aggressive compiler optimizations. Because it preserves the concrete
+callable, it is transparent to the compiler, so that `FnRef` preserves inlining potential suited
 for hot loops or frequent callback interrupts where performance is critical.
 
 ## Introduction
@@ -124,15 +123,8 @@ create_unsafe():
 
 ### Exception safety
 
-As of now, `FnRef` propagates the exception specification of wrapped callables. This 
-has been a matter of conflict. From a design perspective, achieving a satisfactory
-answer is hard. While an unconditional use of `noexcept` would default to more aggressive optimizations 
-by the compiler, it would change callable observable behaviour. So there is a clear 
-tradeoff between transparency and efficiency. Considering that the same
-can be achieved by properly defining such `noexcept` guarantees 
-on the compute side (i.e., instead of the `FnRef` interface), the current 
-decision to uphold consistency over efficiency is intentional but not necessarily final.
-
-To give a concrete motivation for either choice, we point to the fact that 
-performance gains from enforcing `noexcept` are only speculative while the 
-semantic cost of breaking transparency is immediate. 
+As of now, `FnRef::operator()`  is **not** `noexcept`. This is somewhat intentional 
+since preserving a simple forwarding interface is more
+important than trying to impose exception guarantees at the wrapper level.
+Users that require non-throwing behavior should express that requirement on the
+callable itself or at the call site.
