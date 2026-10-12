@@ -9,6 +9,27 @@ the compiler can often see through the forwarding layer when the target is
 visible at the call site. `FnRef` typically preserves inlining potential suited
 for hot loops or frequent callback interrupts where performance is critical.
 
+## Installation
+
+`FnRef` is header-only. The simplest way to **use** it is to copy
+`include/fn_ref.hpp` into your project include path.
+
+However, you may retrive the project from this directory as well.
+You'll need git and cmake installed. 
+
+```bash
+# checkout library
+$ git clone https://github.com/elder-berries/fn-ref.git
+# go to project root and generate build system files (and tests)
+$ cd fn-ref
+$ cmake -S . -B build -DENABLE_TEST_BUILDS=ON
+# go to build folder
+$ cd build
+# run tests.
+$ cmake --build .
+$ ctest
+```
+
 ## Introduction
 
 We begin with a brief account of the simplest usage we have for the construct. 
