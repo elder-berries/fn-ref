@@ -4,8 +4,9 @@
 
 `FnRef` implements a non-owning callable wrapper that avoids the indirection cost of
 traditional type-erasure designs. This is achieved through template specialization,
-which allows aggressive compiler optimizations. Because it preserves the concrete
-callable, it is transparent to the compiler, so that `FnRef` preserves inlining potential suited
+which allows aggressive compiler optimizations. Storing the concrete callable type, 
+the compiler can often see through the forwarding layer when the target is
+visible at the call site. `FnRef` typically preserves inlining potential suited
 for hot loops or frequent callback interrupts where performance is critical.
 
 ## Introduction
@@ -14,7 +15,7 @@ We begin with a brief account of the simplest usage we have for the construct.
 
 ```c++
 
-#include "fnref.hpp"
+#include "fn_ref.hpp"
 
 int add(int a, int b) {
     return a + b;
