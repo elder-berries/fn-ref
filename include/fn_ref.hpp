@@ -15,12 +15,12 @@ class FnRef<Ret(*)(Args...)> {
     using functor = Ret(*)(Args...);
     functor f;
 
-    public:
-        explicit FnRef(functor f_) : f(f_) {};
+public:
+    explicit FnRef(functor f_) : f(f_) {};
 
-        Ret operator()(const Args&... args) const {
-            return f(args...);
-        }
+    Ret operator()(const Args&... args) const {
+        return f(args...);
+    }
 };
 
 
@@ -30,12 +30,12 @@ class FnRef<Ret(Class::*)(Args...)> {
     using functor = Ret(Class::*)(Args...);
     functor f;
 
-    public:
-        explicit FnRef(functor f_) : f(f_) {};
+public:
+    explicit FnRef(functor f_) : f(f_) {};
 
-        Ret operator()(Class& obj, const Args&... args) const {
-            return (obj.*f)(args...);
-        }
+    Ret operator()(Class& obj, const Args&... args) const {
+        return (obj.*f)(args...);
+    }
 };
 
 
@@ -45,12 +45,12 @@ class FnRef<Ret(Class::*)(Args...) const> {
     using functor = Ret(Class::*)(Args...) const;
     functor f;
 
-    public:
-        explicit FnRef(functor f_) : f(f_) {};
+public:
+    explicit FnRef(functor f_) : f(f_) {};
 
-        Ret operator()(const Class& obj, const Args&... args) const {
-            return (obj.*f)(args...);
-        }
+    Ret operator()(const Class& obj, const Args&... args) const {
+        return (obj.*f)(args...);
+    }
 };
 
 
@@ -63,13 +63,13 @@ class FnRef {
     template <typename... Args>
     using Ret = decltype(std::declval<Callable>()(std::declval<Args>()...));
 
-    public:
-        explicit FnRef(functor f_) : f(f_) {}
+public:
+    explicit FnRef(functor f_) : f(f_) {}
 
-        template <typename... Args>
-        auto operator()(Args&&... args) const -> Ret<Args...> {
-            return (*f)(std::forward<Args>(args)...);
-        }
+    template <typename... Args>
+    auto operator()(Args&&... args) const -> Ret<Args...> {
+        return (*f)(std::forward<Args>(args)...);
+    }
 };
 
 
